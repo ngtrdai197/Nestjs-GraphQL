@@ -1,0 +1,28 @@
+type EditUserInput {
+  _id: String!
+  username: String!
+  password: String!
+  fullName: String!
+  address: String
+}
+
+type User {
+  _id: String!
+  username: String!
+  password: String!
+  fullName: String!
+  address: String
+}
+
+type Query {
+  getUsers: [User!]!
+}
+
+type Mutation {
+  addUser(
+    username: String!
+    password: String!
+    fullName: String!
+    address: String
+  ): EditUserInput!
+}
