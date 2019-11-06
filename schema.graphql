@@ -1,5 +1,5 @@
 type EditUserInput {
-  _id: String!
+  _id: ID!
   username: String!
   password: String!
   fullName: String!
@@ -7,15 +7,54 @@ type EditUserInput {
 }
 
 type User {
-  _id: String!
+  _id: ID!
   username: String!
   password: String!
   fullName: String!
   address: String
 }
 
+type InputFriendsRequest {
+  user: User!
+  toUser: User!
+  notification: String
+  status: Int!
+}
+
+type FriendsRequestPopulate {
+  _id: ID!
+  user: User!
+  toUser: User!
+  notification: String
+  status: Int!
+}
+type FriendsRequest {
+  _id: ID!
+  user: String!
+  toUser: String!
+  notification: String
+  status: Int!
+}
+
+type UsersPagination {
+  currentPage: Int!
+  total: Int!
+  users: [User]!
+  pages: Int!
+}
+type FriendRequestPagination {
+  currentPage: Int!
+  total: Int!
+  friendRequests: [FriendsRequestPopulate]!
+  pages: Int!
+}
+
 type Query {
-  getUsers: [User!]!
+  getUsers(page: Int!, perPage: Int!): UsersPagination!
+  findAllFriendRequest(
+    page: Int!
+    perPage: Int!
+  ): FriendRequestPagination!
 }
 
 type Mutation {
@@ -25,4 +64,21 @@ type Mutation {
     fullName: String!
     address: String
   ): EditUserInput!
+  createFriendsRequest(
+    user: String!
+    toUser: String!
+    notification: String
+    status: Int = 0
+  ): FriendsRequest!
+  updateNoficationFriendsRequest(
+    requestId: String!
+    notification: String!
+  ): FriendsRequest!
+  updateStatusFriendRequest(
+    requestId: String!
+    status: Int!
+  ): FriendsRequest!
+  removeFriendsRequest(
+    requestId: String!
+  ): Boolean!
 }

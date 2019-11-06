@@ -22,4 +22,10 @@ export class ConfigService {
   get databaseName(): string {
     return this.envConfig.DATABASE_NAME;
   }
+  get db_username(): string {
+    return this.envConfig.DB_USERNAME;
+  }
+  get db_password(): string {
+    return this.envConfig.DB_PASS;
+  }
 }

@@ -21,7 +21,17 @@ export class UserService {
       throw error;
     }
   }
-  async findAll(query?: any): Promise<Array<IUser>> {
-    return await this.userModel.find(query);
+  async findAll(conditions: any): Promise<any> {
+    const users = await this.userModel
+      .find({})
+      .skip(conditions.page * conditions.perPage - conditions.perPage)
+      .limit(conditions.perPage);
+    const counter = await this.userModel.estimatedDocumentCount(); // count the total of document;
+    return Promise.resolve({
+      users,
+      currentPage: conditions.page,
+      total: counter,
+      pages: Math.ceil(counter / conditions.perPage),
+    });
   }
 }

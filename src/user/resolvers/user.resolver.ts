@@ -1,5 +1,5 @@
 import { Query, Resolver, Args, Mutation } from '@nestjs/graphql';
-import { User, NewUserInput } from '../../common/graphql/models/user.graphql';
+import { User, NewUserInput, UsersPagination } from '../../common/graphql/models/user.graphql';
 import { CreateUserDto } from '../models/user.dto';
 import { UserService } from '../user.service';
 
@@ -7,16 +7,18 @@ import { UserService } from '../user.service';
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Query(returns => [User])
-  async getUsers() {
-    const query = {};
-    return await this.userService.findAll(query);
+  @Query(returns => UsersPagination)
+  async getUsers(@Args('page') page: number, @Args('perPage') perPage: number): Promise<any> {
+    const conditions = {
+      page,
+      perPage,
+    };
+    return await this.userService.findAll(conditions);
   }
 
   @Mutation(returns => User)
   async addUser(@Args() newUser: NewUserInput) {
     const user = await this.userService.create(newUser);
-    console.log(user);
     return user;
   }
 }
