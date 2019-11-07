@@ -68,7 +68,7 @@ type Mutation {
     user: String!
     toUser: String!
     notification: String
-    status: Int = 0
+    status: Int
   ): FriendsRequest!
   updateNoficationFriendsRequest(
     requestId: String!

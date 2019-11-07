@@ -5,7 +5,7 @@ import {
   FriendsRequest,
   InputFriendsRequest,
   FriendRequestPagination,
-} from '../../common/graphql/models/friend-request.graphql';
+} from '../../graphql/models/friend-request.graphql';
 import { IFriendsRequest } from '@/friends-request/interfaces/friends-request.interface';
 import { FriendsRequestService } from '../friends-request.service';
 
@@ -17,6 +17,7 @@ export class FriendsRequestResolver {
   async createFriendsRequest(
     @Args() createFriendsRequest: InputFriendsRequest,
   ): Promise<IFriendsRequest> {
+    console.log(createFriendsRequest.status);
     if (!createFriendsRequest.toUser || !createFriendsRequest.user) {
       throw new HttpException(
         {
@@ -27,17 +28,14 @@ export class FriendsRequestResolver {
       );
     }
 
-    const conditions = {
-      user: createFriendsRequest.user,
-      toUser: createFriendsRequest.toUser,
-      status: {
-        $nin: [1, -1],
-      },
-    };
-    const checkRequest = await this.friendsRequestService.findOne(conditions);
-    if (!checkRequest) {
-      return await this.friendsRequestService.create(createFriendsRequest);
-    }
+    // const conditions = {
+    //   user: createFriendsRequest.user,
+    //   toUser: createFriendsRequest.toUser,
+    // };
+    // const checkRequest = await this.friendsRequestService.findOne(conditions);
+    // if (!checkRequest) {
+    //   return await this.friendsRequestService.create(createFriendsRequest);
+    // }
     throw new HttpException(
       {
         message: 'request da ton tai',

@@ -46,7 +46,7 @@ export class UsersPagination {
 
   @Field(type => [User]!)
   users: [User];
-  
+
   @Field(type => Number)
   pages: number;
 }

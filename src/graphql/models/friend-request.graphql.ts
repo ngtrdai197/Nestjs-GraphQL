@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID, ArgsType } from 'type-graphql';
+import { ObjectType, Field, ID, ArgsType, Int } from 'type-graphql';
 import { User } from './user.graphql';
 
 @ObjectType()
@@ -13,8 +13,8 @@ export class FriendsRequest {
   @Field(type => User)
   toUser: User;
 
-  @Field(type => String)
-  notification: string;
+  @Field(type => String, { nullable: true })
+  notification?: string;
 
   @Field(type => Number)
   status: number;
@@ -30,9 +30,9 @@ export class InputFriendsRequest {
   toUser: string;
 
   @Field({ nullable: true })
-  notification: string;
+  notification?: string;
 
-  @Field()
+  @Field(type => Int, { defaultValue: 0 })
   status: number;
 }
 
