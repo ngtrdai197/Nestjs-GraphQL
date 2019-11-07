@@ -17,7 +17,7 @@ export class FriendsRequestResolver {
   async createFriendsRequest(
     @Args() createFriendsRequest: InputFriendsRequest,
   ): Promise<IFriendsRequest> {
-    console.log(createFriendsRequest.status);
+    createFriendsRequest.status = 0;
     if (!createFriendsRequest.toUser || !createFriendsRequest.user) {
       throw new HttpException(
         {
@@ -28,14 +28,14 @@ export class FriendsRequestResolver {
       );
     }
 
-    // const conditions = {
-    //   user: createFriendsRequest.user,
-    //   toUser: createFriendsRequest.toUser,
-    // };
-    // const checkRequest = await this.friendsRequestService.findOne(conditions);
-    // if (!checkRequest) {
-    //   return await this.friendsRequestService.create(createFriendsRequest);
-    // }
+    const conditions = {
+      user: createFriendsRequest.user,
+      toUser: createFriendsRequest.toUser,
+    };
+    const checkRequest = await this.friendsRequestService.findOne(conditions);
+    if (!checkRequest) {
+      return await this.friendsRequestService.create(createFriendsRequest);
+    }
     throw new HttpException(
       {
         message: 'request da ton tai',
@@ -45,7 +45,9 @@ export class FriendsRequestResolver {
     );
   }
   @Mutation(returns => Boolean)
-  async removeFriendsRequest(@Args('requestId')requestId: string): Promise<any> {
+  async removeFriendsRequest(
+    @Args('requestId') requestId: string,
+  ): Promise<any> {
     const conditions = {
       _id: requestId,
       status: {

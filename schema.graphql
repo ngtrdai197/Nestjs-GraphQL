@@ -51,10 +51,8 @@ type FriendRequestPagination {
 
 type Query {
   getUsers(page: Int!, perPage: Int!): UsersPagination!
-  findAllFriendRequest(
-    page: Int!
-    perPage: Int!
-  ): FriendRequestPagination!
+  findAllFriendRequest(page: Int!, perPage: Int!): FriendRequestPagination!
+  currentUser: User
 }
 
 type Mutation {
@@ -74,11 +72,6 @@ type Mutation {
     requestId: String!
     notification: String!
   ): FriendsRequest!
-  updateStatusFriendRequest(
-    requestId: String!
-    status: Int!
-  ): FriendsRequest!
-  removeFriendsRequest(
-    requestId: String!
-  ): Boolean!
+  updateStatusFriendRequest(requestId: String!, status: Int!): FriendsRequest!
+  removeFriendsRequest(requestId: String!): Boolean!
 }

@@ -7,7 +7,7 @@ import { ConfigService } from './common/config/config.service';
 import { ConfigModule } from './common/config/config.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { FriendsRequestModule } from './friends-request/friends-request.module';
-
+import { AuthModule } from './common/auth/auth.module';
 const configService: ConfigService = new ConfigService(`development.env`);
 
 @Module({
@@ -15,7 +15,11 @@ const configService: ConfigService = new ConfigService(`development.env`);
     GraphQLModule.forRoot({
       // autoSchemaFile: 'schema.graphql',
       typePaths: ['./**/*.graphql'],
+      context: ({ req }) => ({ req }),
     }),
+    UserModule,
+    ConfigModule,
+    AuthModule,
     MongooseModule.forRoot(
       `mongodb://localhost:27017/${configService.databaseName}`,
     ),

@@ -34,4 +34,8 @@ export class UserService {
       pages: Math.ceil(counter / conditions.perPage),
     });
   }
+
+  async findOne(query?: any): Promise<IUser> {
+    return await this.userModel.findOne(query);
+  }
 }
