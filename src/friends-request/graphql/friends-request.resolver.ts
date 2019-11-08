@@ -15,7 +15,7 @@ export class FriendsRequestResolver {
 
   @Mutation(returns => FriendsRequest)
   async createFriendsRequest(
-    @Args() createFriendsRequest: InputFriendsRequest,
+    @Args('createFriendsRequest') createFriendsRequest: InputFriendsRequest,
   ): Promise<IFriendsRequest> {
     createFriendsRequest.status = 0;
     if (!createFriendsRequest.toUser || !createFriendsRequest.user) {
@@ -29,20 +29,33 @@ export class FriendsRequestResolver {
     }
 
     const conditions = {
-      user: createFriendsRequest.user,
-      toUser: createFriendsRequest.toUser,
+      $or: [
+        {
+          user: createFriendsRequest.user,
+          toUser: createFriendsRequest.toUser,
+        },
+        {
+          user: createFriendsRequest.toUser,
+          toUser: createFriendsRequest.user,
+        },
+      ],
     };
     const checkRequest = await this.friendsRequestService.findOne(conditions);
-    if (!checkRequest) {
-      return await this.friendsRequestService.create(createFriendsRequest);
+    if (checkRequest) {
+      throw new HttpException(
+        {
+          message: 'request da ton tai',
+          statusCode: 400,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
-    throw new HttpException(
-      {
-        message: 'request da ton tai',
-        statusCode: 400,
-      },
-      HttpStatus.BAD_REQUEST,
+    const created = await this.friendsRequestService.create(
+      createFriendsRequest,
     );
+    return await this.friendsRequestService.findOneAndPopulate({
+      _id: created._id,
+    });
   }
   @Mutation(returns => Boolean)
   async removeFriendsRequest(

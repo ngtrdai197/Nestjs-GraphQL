@@ -13,8 +13,7 @@ const configService: ConfigService = new ConfigService(`development.env`);
 @Module({
   imports: [
     GraphQLModule.forRoot({
-      // autoSchemaFile: 'schema.graphql',
-      typePaths: ['./**/*.graphql'],
+      autoSchemaFile: 'schema.graphql',
       context: ({ req }) => ({ req }),
     }),
     UserModule,

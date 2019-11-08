@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID, ArgsType, Int } from 'type-graphql';
+import { ObjectType, Field, ID, ArgsType, Int, InputType } from 'type-graphql';
 import { User } from './user.graphql';
 
 @ObjectType()
@@ -21,7 +21,7 @@ export class FriendsRequest {
 }
 
 // tslint:disable-next-line:max-classes-per-file
-@ArgsType()
+@InputType()
 export class InputFriendsRequest {
   @Field()
   user: string;

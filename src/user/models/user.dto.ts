@@ -1,5 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { IsString, IsNotEmpty } from 'class-validator';
+import { Optional } from '@nestjs/common';
 
 export class CreateUserDto {
   @IsString()
@@ -15,5 +16,6 @@ export class CreateUserDto {
   fullName: string;
 
   @IsString()
+  @Optional()
   address?: string;
 }
