@@ -39,6 +39,10 @@ type Query {
   findAllFriendRequest(perPage: Float!, page: Float!): FriendRequestPagination!
 }
 
+type Subscription {
+  subscribe: FriendsRequest!
+}
+
 type User {
   _id: ID!
   username: String!

@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Query, Subscription } from '@nestjs/graphql';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 import {
@@ -8,6 +8,9 @@ import {
 } from '../../graphql/models/friend-request.graphql';
 import { IFriendsRequest } from '@/friends-request/interfaces/friends-request.interface';
 import { FriendsRequestService } from '../friends-request.service';
+import { PubSub } from 'graphql-subscriptions';
+
+const pubSub = new PubSub();
 
 @Resolver(of => FriendsRequest)
 export class FriendsRequestResolver {
@@ -53,9 +56,11 @@ export class FriendsRequestResolver {
     const created = await this.friendsRequestService.create(
       createFriendsRequest,
     );
-    return await this.friendsRequestService.findOneAndPopulate({
+    const result = await this.friendsRequestService.findOneAndPopulate({
       _id: created._id,
     });
+    pubSub.publish('createdFQ', { subscribe: result });
+    return result;
   }
   @Mutation(returns => Boolean)
   async removeFriendsRequest(
@@ -143,6 +148,10 @@ export class FriendsRequestResolver {
     });
   }
 
+  @Subscription(returns => FriendsRequest)
+  async subscribe() {
+    return pubSub.asyncIterator('createdFQ');
+  }
   @Query(returns => FriendRequestPagination)
   async findAllFriendRequest(
     @Args('page') page: number,

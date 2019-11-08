@@ -15,6 +15,7 @@ const configService: ConfigService = new ConfigService(`development.env`);
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.graphql',
       context: ({ req }) => ({ req }),
+      installSubscriptionHandlers: true, // enable subscription graphql
     }),
     UserModule,
     ConfigModule,
