@@ -8,17 +8,15 @@ import { Strategy, ExtractJwt } from 'passport-jwt';
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     private readonly authService: AuthService,
-    private readonly _configurationService: ConfigService,
+    private readonly configService: ConfigService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'SECRET_KEY',
+      secretOrKey: configService.secretKey,
     });
-    console.log('Run Jwt Strategy');
   }
 
   async validate({ username, password }): Promise<any> {
-    console.log('vo validate func within JwtStrategy ...');
     const user = await this.authService.validateUser(username, password);
     return user;
   }

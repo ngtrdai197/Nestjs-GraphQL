@@ -8,7 +8,6 @@ import { ConfigModule } from './common/config/config.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { FriendsRequestModule } from './friends-request/friends-request.module';
 import { AuthModule } from './common/auth/auth.module';
-const configService: ConfigService = new ConfigService(`development.env`);
 
 @Module({
   imports: [
@@ -17,13 +16,21 @@ const configService: ConfigService = new ConfigService(`development.env`);
       context: ({ req }) => ({ req }),
       installSubscriptionHandlers: true, // enable subscription graphql
     }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.uriConnectDB,
+        options: {
+          useNewUrlParser: true,
+          useCreateIndex: true,
+          useFindAndModify: true,
+          useUnifiedTopology: true,
+        },
+      }),
+      inject: [ConfigService],
+    }),
     UserModule,
-    ConfigModule,
     AuthModule,
-    MongooseModule.forRoot(
-      `mongodb://localhost:27017/${configService.databaseName}`,
-    ),
-    UserModule,
     ConfigModule,
     FriendsRequestModule,
   ],
