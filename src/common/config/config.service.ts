@@ -22,6 +22,8 @@ export class ConfigService {
       PORT: Joi.number().default(3000),
       DATABASE_NAME: Joi.string().required(),
       SECRET_KEY: Joi.string().required(),
+      DB_USER: Joi.string().required(),
+      DB_PASS: Joi.string().required()
     });
     const { error, value: validatedEnvConfig } = envVarsSchema.validate(
       envConfig,
@@ -39,13 +41,24 @@ export class ConfigService {
   get port(): number {
     return +this.envConfig.PORT;
   }
-  get databaseName(): string {
+  get nameDB(): string {
     return this.envConfig.DATABASE_NAME;
   }
 
+  get userDB(): string {
+    return this.envConfig.DB_USER
+  }
+
+  get passDB(): string {
+    return this.envConfig.DB_PASS
+  }
+
   get uriConnectDB(): string {
-    const host = `mongodb://localhost:27017`;
-    return `${host}/${this.databaseName}`;
+    const urlDatabaseAtlas = 
+    `mongodb+srv://${this.userDB}:${this.passDB}@cluster0-esass.mongodb.net/${this.nameDB}?retryWrites=true&w=majority`
+    return urlDatabaseAtlas
+    // const host = `mongodb://localhost:27017`;
+    // return `${host}/${this.nameDB}`;
   }
 
   get secretKey(): string {

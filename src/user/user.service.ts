@@ -26,7 +26,7 @@ export class UserService {
       .find({})
       .skip(conditions.page * conditions.perPage - conditions.perPage)
       .limit(conditions.perPage);
-    const counter = await this.userModel.estimatedDocumentCount(); // count the total of document;
+    const counter = await this.userModel.countDocuments(); // count the total of document;
     return Promise.resolve({
       users,
       currentPage: conditions.page,
