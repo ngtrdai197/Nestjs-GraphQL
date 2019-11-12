@@ -31,11 +31,18 @@ type Mutation {
   removeFriendsRequest(requestId: String!): Boolean!
   updateNoficationFriendsRequest(notification: String!, requestId: String!): FriendsRequest!
   updateStatusFriendRequest(status: Float!, requestId: String!): FriendsRequest!
+  signIn(username: String!, password: String!): String!
+}
+
+type Pagination {
+  hasNextPage: Boolean!
+  result: [User!]!
 }
 
 type Query {
   getUsers(perPage: Float!, page: Float!): UsersPagination!
   currentUser: User!
+  friends(fullName: String!): Pagination!
   findAllFriendRequest(perPage: Float!, page: Float!): FriendRequestPagination!
 }
 

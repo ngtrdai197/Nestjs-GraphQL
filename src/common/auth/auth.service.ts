@@ -37,7 +37,7 @@ export class AuthService {
       fullName: user.fullName
     }
     const token = await this.jwtSignToken(jwtPayload)
-    return { token }
+    return token 
   }
 
   private async jwtSignToken(jwtPayload: IJwtPayload): Promise<string> {

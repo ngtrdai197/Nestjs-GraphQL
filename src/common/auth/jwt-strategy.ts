@@ -23,6 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
      * nếu token invalid trả về Unauthorization và không đi vào hàm này để handle
     */
     const user = await this.authService.validateUser(jwtPayload);
+    
     if (!user) {
       throw new UnauthorizedException()
     }

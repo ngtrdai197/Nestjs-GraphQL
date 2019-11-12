@@ -3,6 +3,7 @@ import { Model } from 'mongoose';
 import { IFriendsRequest } from './interfaces/friends-request.interface';
 import { CreateFriendsRequestDto } from './dto/friends-request.dto';
 import { InjectModel } from '@nestjs/mongoose';
+import { IUser } from '../user/interfaces/user.interface';
 
 @Injectable()
 export class FriendsRequestService {
@@ -66,5 +67,17 @@ export class FriendsRequestService {
 
   async deleteManyFriendRequest(conditions: any): Promise<any> {
     return await this.friendsRequestModel.deleteMany(conditions);
+  }
+
+  async findAllFriends(currentUserId: string, fullName: string): Promise<IFriendsRequest[]> {
+    const conditions = {
+      $or: [{ user: currentUserId }, { toUser: currentUserId }],
+      status: 1
+    }
+    console.log(conditions);
+    
+    const result = await this.friendsRequestModel.find(conditions)
+    return result;
+    
   }
 }

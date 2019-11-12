@@ -6,7 +6,7 @@ import {
   InputFriendsRequest,
   FriendRequestPagination,
 } from '../../graphql/models/friend-request.graphql';
-import { IFriendsRequest } from '@/friends-request/interfaces/friends-request.interface';
+import { IFriendsRequest } from '../../friends-request/interfaces/friends-request.interface';
 import { FriendsRequestService } from '../friends-request.service';
 import { PubSub } from 'graphql-subscriptions';
 

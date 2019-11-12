@@ -19,6 +19,16 @@ export class User {
   address?: string;
 }
 
+@ObjectType()
+export class Pagination {
+
+  @Field()
+  hasNextPage: boolean
+
+  @Field(type => [User])
+  result: User[]
+}
+
 // tslint:disable-next-line:max-classes-per-file
 @ArgsType()
 export class NewUserInput {

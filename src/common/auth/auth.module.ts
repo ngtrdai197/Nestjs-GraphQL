@@ -6,6 +6,7 @@ import { UserModule } from '../../user/user.module';
 import { JwtStrategy } from './jwt-strategy';
 import { ConfigModule } from '../config/config.module';
 import { ConfigService } from '../config/config.service';
+import { AuthResolver } from './auth.resolver';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { ConfigService } from '../config/config.service';
       inject: [ConfigService],
     }),
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, AuthResolver],
   exports: [AuthService],
 })
 export class AuthModule {}
