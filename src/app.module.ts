@@ -1,13 +1,13 @@
-import { Module, NestModule } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
-import { ConfigService } from './common/config/config.service';
-import { ConfigModule } from './common/config/config.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import { FriendsRequestModule } from './friends-request/friends-request.module';
-import { AuthModule } from './common/auth/auth.module';
+import { Module, NestModule } from '@nestjs/common'
+import { GraphQLModule } from '@nestjs/graphql'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { UserModule } from './user/user.module'
+import { ConfigService } from './common/config/config.service'
+import { ConfigModule } from './common/config/config.module'
+import { MongooseModule } from '@nestjs/mongoose'
+import { FriendsRequestModule } from './friends-request/friends-request.module'
+import { AuthModule } from './common/auth/auth.module'
 
 @Module({
   imports: [

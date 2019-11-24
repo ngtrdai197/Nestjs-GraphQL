@@ -1,6 +1,6 @@
-import * as mongoose from 'mongoose';
+import * as mongoose from 'mongoose'
 
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 
 export const FriendsRequestSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -8,4 +8,4 @@ export const FriendsRequestSchema = new Schema({
 
   notification: { type: String },
   status: { type: Number },
-});
+})

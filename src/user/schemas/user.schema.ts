@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import * as mongoose from 'mongoose'
 
 export const userSchema = new mongoose.Schema(
   {
@@ -27,4 +27,4 @@ export const userSchema = new mongoose.Schema(
       virtuals: true,
     },
   },
-);
+)

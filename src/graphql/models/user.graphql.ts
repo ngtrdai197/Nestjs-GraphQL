@@ -1,27 +1,27 @@
-import { ObjectType, ID, Field, ArgsType } from 'type-graphql';
+import { ObjectType, ID, Field, ArgsType } from 'type-graphql'
 
 @ObjectType()
 export class User {
   @Field(type => ID)
-  // tslint:disable-next-line:variable-name
-  _id: string;
+  // tslint:disable-next-line: variable-name
+  _id: string
 
   @Field()
-  username: string;
+  username: string
 
   @Field()
-  password: string;
+  password: string
 
   @Field()
-  fullName: string;
+  fullName: string
 
   @Field({ nullable: true })
-  address?: string;
+  address?: string
 }
 
+// tslint:disable-next-line: max-classes-per-file
 @ObjectType()
 export class Pagination {
-
   @Field()
   hasNextPage: boolean
 
@@ -33,30 +33,30 @@ export class Pagination {
 @ArgsType()
 export class NewUserInput {
   @Field()
-  username: string;
+  username: string
 
   @Field()
-  password: string;
+  password: string
 
   @Field()
-  fullName: string;
+  fullName: string
 
   @Field({ nullable: true })
-  address?: string;
+  address?: string
 }
 
 // tslint:disable-next-line:max-classes-per-file
 @ObjectType()
 export class UsersPagination {
   @Field(type => Number)
-  currentPage: number;
+  currentPage: number
 
   @Field(type => Number)
-  total: number;
+  total: number
 
   @Field(type => [User]!)
-  users: [User];
+  users: [User]
 
   @Field(type => Number)
-  pages: number;
+  pages: number
 }

@@ -1,8 +1,8 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { IUser } from './interfaces/user.interface';
-import { CreateUserDto } from './models/user.dto';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
+import { Model } from 'mongoose'
+import { IUser } from './interfaces/user.interface'
+import { CreateUserDto } from './models/user.dto'
 
 @Injectable()
 export class UserService {
@@ -12,30 +12,30 @@ export class UserService {
     try {
       const checkUserName = await this.userModel.findOne({
         username: createUserDto.username,
-      });
+      })
       if (!checkUserName) {
-        return await this.userModel.create(createUserDto);
+        return await this.userModel.create(createUserDto)
       }
-      throw new HttpException('Username đã tồn tại', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Username đã tồn tại', HttpStatus.BAD_REQUEST)
     } catch (error) {
-      throw error;
+      throw error
     }
   }
   async findAll(conditions: any): Promise<any> {
     const users = await this.userModel
       .find({})
       .skip(conditions.page * conditions.perPage - conditions.perPage)
-      .limit(conditions.perPage);
-    const counter = await this.userModel.countDocuments(); // count the total of document;
+      .limit(conditions.perPage)
+    const counter = await this.userModel.countDocuments() // count the total of document;
     return Promise.resolve({
       users,
       currentPage: conditions.page,
       total: counter,
       pages: Math.ceil(counter / conditions.perPage),
-    });
+    })
   }
 
   async findOne(query?: any): Promise<IUser> {
-    return await this.userModel.findOne(query);
+    return await this.userModel.findOne(query)
   }
 }

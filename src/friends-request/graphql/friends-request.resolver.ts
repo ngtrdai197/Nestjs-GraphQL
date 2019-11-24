@@ -1,16 +1,16 @@
-import { Resolver, Mutation, Args, Query, Subscription } from '@nestjs/graphql';
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { Resolver, Mutation, Args, Query, Subscription } from '@nestjs/graphql'
+import { HttpException, HttpStatus } from '@nestjs/common'
 
 import {
   FriendsRequest,
   InputFriendsRequest,
   FriendRequestPagination,
-} from '../../graphql/models/friend-request.graphql';
-import { IFriendsRequest } from '../../friends-request/interfaces/friends-request.interface';
-import { FriendsRequestService } from '../friends-request.service';
-import { PubSub } from 'graphql-subscriptions';
+} from '../../graphql/models/friend-request.graphql'
+import { IFriendsRequest } from '../../friends-request/interfaces/friends-request.interface'
+import { FriendsRequestService } from '../friends-request.service'
+import { PubSub } from 'graphql-subscriptions'
 
-const pubSub = new PubSub();
+const pubSub = new PubSub()
 
 @Resolver(of => FriendsRequest)
 export class FriendsRequestResolver {
@@ -20,7 +20,7 @@ export class FriendsRequestResolver {
   async createFriendsRequest(
     @Args('createFriendsRequest') createFriendsRequest: InputFriendsRequest,
   ): Promise<IFriendsRequest> {
-    createFriendsRequest.status = 0;
+    createFriendsRequest.status = 0
     if (!createFriendsRequest.toUser || !createFriendsRequest.user) {
       throw new HttpException(
         {
@@ -28,7 +28,7 @@ export class FriendsRequestResolver {
           statusCode: 400,
         },
         HttpStatus.BAD_REQUEST,
-      );
+      )
     }
 
     const conditions = {
@@ -42,8 +42,8 @@ export class FriendsRequestResolver {
           toUser: createFriendsRequest.user,
         },
       ],
-    };
-    const checkRequest = await this.friendsRequestService.findOne(conditions);
+    }
+    const checkRequest = await this.friendsRequestService.findOne(conditions)
     if (checkRequest) {
       throw new HttpException(
         {
@@ -51,16 +51,16 @@ export class FriendsRequestResolver {
           statusCode: 400,
         },
         HttpStatus.BAD_REQUEST,
-      );
+      )
     }
     const created = await this.friendsRequestService.create(
       createFriendsRequest,
-    );
+    )
     const result = await this.friendsRequestService.findOneAndPopulate({
       _id: created._id,
-    });
-    pubSub.publish('createdFQ', { subscribe: result });
-    return result;
+    })
+    pubSub.publish('createdFQ', { subscribe: result })
+    return result
   }
   @Mutation(returns => Boolean)
   async removeFriendsRequest(
@@ -71,8 +71,8 @@ export class FriendsRequestResolver {
       status: {
         $nin: [1, -1],
       },
-    };
-    const friendRequest = await this.friendsRequestService.findOne(conditions);
+    }
+    const friendRequest = await this.friendsRequestService.findOne(conditions)
     if (!friendRequest) {
       throw new HttpException(
         {
@@ -80,9 +80,9 @@ export class FriendsRequestResolver {
           statusCode: 400,
         },
         HttpStatus.BAD_REQUEST,
-      );
+      )
     }
-    return await this.friendsRequestService.remove(conditions);
+    return await this.friendsRequestService.remove(conditions)
   }
 
   @Mutation(returns => FriendsRequest)
@@ -90,8 +90,8 @@ export class FriendsRequestResolver {
     @Args('requestId') requestId: string,
     @Args('notification') notification: string,
   ): Promise<IFriendsRequest> {
-    const query = { _id: requestId };
-    const friendsRequest = await this.friendsRequestService.findOne(query);
+    const query = { _id: requestId }
+    const friendsRequest = await this.friendsRequestService.findOne(query)
     if (!friendsRequest) {
       throw new HttpException(
         {
@@ -99,11 +99,11 @@ export class FriendsRequestResolver {
           statusCode: 404,
         },
         HttpStatus.NOT_FOUND,
-      );
+      )
     }
     return await this.friendsRequestService.update(friendsRequest._id, {
       notification,
-    });
+    })
   }
 
   @Mutation(returns => FriendsRequest)
@@ -111,8 +111,8 @@ export class FriendsRequestResolver {
     @Args('requestId') requestId: string,
     @Args('status') status: number,
   ): Promise<IFriendsRequest> {
-    const query = { _id: requestId };
-    const friendRequest = await this.friendsRequestService.findOne(query);
+    const query = { _id: requestId }
+    const friendRequest = await this.friendsRequestService.findOne(query)
     if (!friendRequest) {
       throw new HttpException(
         {
@@ -120,7 +120,7 @@ export class FriendsRequestResolver {
           statusCode: 404,
         },
         HttpStatus.NOT_FOUND,
-      );
+      )
     }
     if (status !== -1 && status !== 0 && status !== 1) {
       throw new HttpException(
@@ -132,7 +132,7 @@ export class FriendsRequestResolver {
           statusCode: 400,
         },
         HttpStatus.BAD_REQUEST,
-      );
+      )
     }
 
     // delete friend request in reserve
@@ -140,17 +140,17 @@ export class FriendsRequestResolver {
       user: friendRequest.toUser,
       toUser: friendRequest.user,
       status: { $nin: [1, -1] },
-    };
-    await this.friendsRequestService.deleteManyFriendRequest(conditions);
+    }
+    await this.friendsRequestService.deleteManyFriendRequest(conditions)
 
     return await this.friendsRequestService.update(friendRequest._id, {
       status,
-    });
+    })
   }
 
   @Subscription(returns => FriendsRequest)
   async subscribe() {
-    return pubSub.asyncIterator('createdFQ');
+    return pubSub.asyncIterator('createdFQ')
   }
   @Query(returns => FriendRequestPagination)
   async findAllFriendRequest(
@@ -160,7 +160,7 @@ export class FriendsRequestResolver {
     const conditions = {
       page,
       perPage,
-    };
-    return await this.friendsRequestService.findAllAnPopulate(conditions);
+    }
+    return await this.friendsRequestService.findAllAnPopulate(conditions)
   }
 }

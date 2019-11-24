@@ -1,17 +1,17 @@
-import * as dotenv from 'dotenv';
-import * as fs from 'fs';
-import * as Joi from '@hapi/joi';
+import * as dotenv from 'dotenv'
+import * as fs from 'fs'
+import * as Joi from '@hapi/joi'
 
 export interface EnvConfig {
-  [key: string]: string;
+  [key: string]: string
 }
 
 export class ConfigService {
-  private readonly envConfig: EnvConfig;
+  private readonly envConfig: EnvConfig
 
   constructor(filePath: string) {
-    const config = dotenv.parse(fs.readFileSync(filePath));
-    this.envConfig = this.validateInput(config);
+    const config = dotenv.parse(fs.readFileSync(filePath))
+    this.envConfig = this.validateInput(config)
   }
 
   private validateInput(envConfig: EnvConfig): EnvConfig {
@@ -23,26 +23,26 @@ export class ConfigService {
       DATABASE_NAME: Joi.string().required(),
       SECRET_KEY: Joi.string().required(),
       DB_USER: Joi.string().required(),
-      DB_PASS: Joi.string().required()
-    });
+      DB_PASS: Joi.string().required(),
+    })
     const { error, value: validatedEnvConfig } = envVarsSchema.validate(
       envConfig,
-    );
+    )
     if (error) {
-      throw new Error(`Config validation error: ${error.message}`);
+      throw new Error(`Config validation error: ${error.message}`)
     }
-    return validatedEnvConfig;
+    return validatedEnvConfig
   }
 
   get(key: string): string {
-    return this.envConfig[key];
+    return this.envConfig[key]
   }
 
   get port(): number {
-    return +this.envConfig.PORT;
+    return +this.envConfig.PORT
   }
   get nameDB(): string {
-    return this.envConfig.DATABASE_NAME;
+    return this.envConfig.DATABASE_NAME
   }
 
   get userDB(): string {
@@ -54,21 +54,22 @@ export class ConfigService {
   }
 
   get uriConnectDB(): string {
-    const urlDatabaseAtlas = 
-    `mongodb+srv://${this.userDB}:${this.passDB}@cluster0-esass.mongodb.net/${this.nameDB}?retryWrites=true&w=majority`
+    const urlDatabaseAtlas = `mongodb+srv://${this.userDB}:${
+      this.passDB
+    }@cluster0-esass.mongodb.net/${this.nameDB}?retryWrites=true&w=majority`
     return urlDatabaseAtlas
     // const host = `mongodb://localhost:27017`;
     // return `${host}/${this.nameDB}`;
   }
 
   get secretKey(): string {
-    return this.envConfig.SECRET_KEY;
+    return this.envConfig.SECRET_KEY
   }
 
   get db_username(): string {
-    return this.envConfig.DB_USERNAME;
+    return this.envConfig.DB_USERNAME
   }
   get db_password(): string {
-    return this.envConfig.DB_PASS;
+    return this.envConfig.DB_PASS
   }
 }
